@@ -7,9 +7,9 @@ import 'package:test/test.dart';
 
 void main() {
   test('Circle area', () {
-    expect(new Circle(1).area(), PI);
+    expect(new Circle(1).area, PI);
   });
   test('Circle circumference', () {
-    expect(new Circle(1).circumference(), 2 * PI);
+    expect(new Circle(1).circumference, 2 * PI);
   });
 }
