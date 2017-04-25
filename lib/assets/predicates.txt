@@ -1,0 +1,7 @@
+area > 5
+circumference < 23
+area < circumference
+1 = 1
+area >= circumference
+area == circumference
+area < 0
