@@ -1,3 +1,3 @@
-abstract class LineParser {
-  parse(String line);
+abstract class LineParser<T> {
+  T parse(String line);
 }

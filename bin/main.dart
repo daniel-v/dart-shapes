@@ -1,10 +1,31 @@
 import 'package:args/args.dart';
 import 'package:dart_shapes/file-parser.dart';
-import 'package:dart_shapes/shapes-mirror.dart';
 import 'package:dart_shapes/predicates.dart';
+import 'package:dart_shapes/shapes.dart';
 
 main(List<String> arguments) async {
+  List<Shape> shapes;
+  List<Predicate> predicates;
+
+  Map<String, String> params = parseParams(arguments);
+
+  var inputParser = new FileParser<Shape>()
+    ..fileName = params['input']
+    ..lineParser = new ShapeParser();
+
+  var predicateParser = new FileParser<Predicate>()
+    ..fileName = params['predicates']
+    ..lineParser = new PredicateParser();
+
+  shapes = await inputParser.parse();
+  predicates = await predicateParser.parse();
+
+  printResults(shapes, predicates);
+}
+
+Map<String, String> parseParams(List<String> arguments) {
   ArgResults argResults;
+  var params = new Map<String, String>();
   final defaultInput = 'lib/assets/input.txt';
   final defaultPredicates = 'lib/assets/predicates.txt';
   final parser = new ArgParser()
@@ -12,39 +33,24 @@ main(List<String> arguments) async {
     ..addOption('predicates', abbr: 'p');
 
   argResults = parser.parse(arguments);
-
-  ShapesMirror mirror = new ShapesMirror();
-  mirror.buildMirrors();
-
   String inputPath =
       argResults['input'] == null ? defaultInput : argResults['input'];
-  FileParser inputParser = new FileParser(inputPath, mirror);
-
-  try {
-    await inputParser.parse();
-  } on NoSuchMethodError catch (e) {
-    print('***Error: don\'t know how to create object ' + e.toString());
-  } on FormatException catch (e) {
-    print('***Error: couldn\'t parse numeric arguments ' + e.toString());
-  }
-
-  Predicates predicates = new Predicates();
   String predicatesPath = argResults['predicates'] == null
       ? defaultPredicates
       : argResults['predicates'];
-  FileParser predicateParser = new FileParser(predicatesPath, predicates);
 
-  try {
-    await predicateParser.parse();
-  } catch (e) {
-    print(e.toString());
-  }
+  params['input'] = inputPath;
+  params['predicates'] = predicatesPath;
 
-  for (var predicate in predicates.predicates) {
+  return params;
+}
+
+void printResults(List<Shape> shapes, List<Predicate> predicates) {
+  for (var predicate in predicates) {
     print('Evaluation of "$predicate" is true for');
     bool hasOne = false;
-    for (var shape in mirror.shapes) {
-      if (predicates.test(shape, predicate)) {
+    for (var shape in shapes) {
+      if (PredicateTester.test(shape, predicate)) {
         hasOne = true;
         print('\t $shape');
       }

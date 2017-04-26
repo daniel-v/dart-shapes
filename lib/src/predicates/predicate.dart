@@ -1,16 +1,18 @@
-class ShapePredicate {
+part of predicates;
+
+class Predicate {
   String operand1;
   String operand2;
   String op;
 
-  static ShapePredicate createFromString(String shapePredicate) {
-    var trimmedPredicate = shapePredicate.trim();
+  static Predicate createFromString(String predicateStr) {
+    var trimmedPredicate = predicateStr.trim();
     if (trimmedPredicate.isEmpty) return null;
 
     var predicateParts = trimmedPredicate.split(' ');
     if (predicateParts.length != 3) return null;
 
-    var result = new ShapePredicate();
+    var result = new Predicate();
     result.operand1 = predicateParts[0];
     result.op = predicateParts[1];
     result.operand2 = predicateParts[2];

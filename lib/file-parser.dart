@@ -4,19 +4,25 @@ import 'dart:convert';
 
 import 'package:dart_shapes/line-parser.dart';
 
-class FileParser {
-  String _filename;
+class FileParser<T> {
+  String _fileName;
   LineParser _lineParser;
+  List<T> entities = new List<T>();
 
-  FileParser(this._filename, this._lineParser) {}
+  set fileName(String fileName) => this._fileName = fileName;
+  set lineParser(LineParser lineParser) => this._lineParser = lineParser;
 
-  parse() async {
-    Stream lines = new File(_filename)
+  Future<List<T>> parse() async {
+    Stream lines = new File(_fileName)
         .openRead()
         .transform(UTF8.decoder)
         .transform(const LineSplitter());
     await for (var line in lines) {
-      _lineParser.parse(line);
+      T entity = _lineParser.parse(line);
+      if (entity != null) {
+        entities.add(entity);
+      }
     }
+    return entities;
   }
 }

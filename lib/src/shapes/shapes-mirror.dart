@@ -1,8 +1,6 @@
-import 'dart:mirrors';
-import 'line-parser.dart';
-import 'shapes.dart';
+part of shapes;
 
-class ShapesMirror implements LineParser {
+class ShapesMirror {
   var _classMirrors = new Map<Symbol, ClassMirror>();
   var _symbolCache = new Map<String, Symbol>();
   final _emptySymbol = new Symbol('');
@@ -43,12 +41,5 @@ class ShapesMirror implements LineParser {
         .newInstance(_emptySymbol, numericArgs)
         .reflectee;
     return shape;
-  }
-
-  parse(String line) {
-    Shape shape = reflect(line);
-    if (shape != null) {
-      shapes.add(shape);
-    }
   }
 }
