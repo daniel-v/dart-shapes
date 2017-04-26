@@ -2,6 +2,7 @@ library shapes;
 
 import 'dart:math' show PI;
 import 'dart:mirrors';
+import 'package:logging/logging.dart';
 import 'package:dart_shapes/line-parser.dart';
 
 part 'src/shapes/shape.dart';

@@ -1,3 +1,4 @@
+area = 25.0
 area > 5
 circumference < 23
 area < circumference

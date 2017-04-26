@@ -1,4 +1,5 @@
 import 'package:args/args.dart';
+import 'package:logging/logging.dart';
 import 'package:dart_shapes/file-parser.dart';
 import 'package:dart_shapes/predicates.dart';
 import 'package:dart_shapes/shapes.dart';
@@ -6,8 +7,9 @@ import 'package:dart_shapes/shapes.dart';
 main(List<String> arguments) async {
   List<Shape> shapes;
   List<Predicate> predicates;
-
   Map<String, String> params = parseParams(arguments);
+
+  Logger log = initLogger();
 
   var inputParser = new FileParser<Shape>()
     ..fileName = params['input']
@@ -17,8 +19,19 @@ main(List<String> arguments) async {
     ..fileName = params['predicates']
     ..lineParser = new PredicateParser();
 
-  shapes = await inputParser.parse();
-  predicates = await predicateParser.parse();
+  try {
+    shapes = await inputParser.parse();
+  } catch (_) {
+    log.severe('Unable to read input file ${params["input"]}. Exiting');
+    return 1;
+  }
+
+  try {
+    predicates = await predicateParser.parse();
+  } catch (_) {
+    log.severe('Unable to read predicates file ${params["predicates"]}. Exiting');
+    return 1;
+  }
 
   printResults(shapes, predicates);
 }
@@ -43,6 +56,14 @@ Map<String, String> parseParams(List<String> arguments) {
   params['predicates'] = predicatesPath;
 
   return params;
+}
+
+Logger initLogger() {
+  Logger.root.level = Level.ALL;
+  Logger.root.onRecord.listen((LogRecord rec) {
+    print('${rec.level.name}: ${rec.time}: ${rec.message}');
+  });
+  return new Logger('main');
 }
 
 void printResults(List<Shape> shapes, List<Predicate> predicates) {
