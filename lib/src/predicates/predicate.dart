@@ -1,12 +1,13 @@
 part of predicates;
 
 class Predicate {
-  String operand1;
-  String operand2;
-  String op;
-  static final log = new Logger('Predicate');
+  final String operand1;
+  final String operand2;
+  final String op;
 
-  static Predicate createFromString(String predicateStr) {
+  Predicate._(this.operand1, this.operand2, this.op);
+
+  factory Predicate.createFromString(String predicateStr) {
     var trimmedPredicate = predicateStr.trim();
     if (trimmedPredicate.isEmpty) {
       log.warning('Received empty line as predicate string');
@@ -15,17 +16,21 @@ class Predicate {
 
     var predicateParts = trimmedPredicate.split(' ');
     if (predicateParts.length != 3) {
-      log.severe('A predicate should contain 3 parts (2 operands and 1 operator), found ${predicateParts.length} parts in "$predicateStr"');
+      log.severe('A predicate should contain 3 parts (2 operands and 1 operator), found ${predicateParts
+          .length} parts in "$predicateStr"');
       return null;
-    } 
+    }
 
-    var result = new Predicate();
-    result.operand1 = predicateParts[0];
-    result.op = predicateParts[1];
-    result.operand2 = predicateParts[2];
+    var result = new Predicate._(
+        predicateParts[0],
+        predicateParts[2],
+        predicateParts[1]
+    );
 
     return result;
   }
 
   String toString() => '$operand1 $op $operand2';
+
+  static final log = new Logger('Predicate');
 }
