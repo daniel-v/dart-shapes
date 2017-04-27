@@ -5,8 +5,8 @@ import 'package:dart_shapes/predicates.dart';
 import 'package:dart_shapes/shapes.dart';
 
 main(List<String> arguments) async {
-  List<Shape> shapes;
-  List<Predicate> predicates;
+  Iterable<Shape> shapes;
+  Iterable<Predicate> predicates;
   Map<String, String> params = parseParams(arguments);
 
   Logger log = initLogger();
@@ -15,14 +15,14 @@ main(List<String> arguments) async {
   var predicateParser = new FileParser<Predicate>(params['predicates'], new PredicateParser());
 
   try {
-    shapes = await inputParser.parse();
+    shapes = inputParser.parse();
   } catch (_) {
     log.severe('Unable to read input file ${params["input"]}. Exiting');
     return 1;
   }
 
   try {
-    predicates = await predicateParser.parse();
+    predicates = predicateParser.parse();
   } catch (_) {
     log.severe('Unable to read predicates file ${params["predicates"]}. Exiting');
     return 1;
@@ -61,7 +61,7 @@ Logger initLogger() {
   return new Logger('main');
 }
 
-void printResults(List<Shape> shapes, List<Predicate> predicates) {
+void printResults(Iterable<Shape> shapes, Iterable<Predicate> predicates) {
   for (var predicate in predicates) {
     print('Evaluation of "$predicate" is true for');
     bool hasOne = false;

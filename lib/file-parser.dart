@@ -13,17 +13,11 @@ class FileParser<T> {
 
   FileParser(this.fileName, this.lineParser);
 
-  Future<List<T>> parse() async {
-    Stream lines = new File(fileName)
-        .openRead()
-        .transform(UTF8.decoder)
-        .transform(const LineSplitter());
-    await for (var line in lines) {
-      T entity = lineParser.parse(line);
-      if (entity != null) {
-        entities.add(entity);
-      }
-    }
-    return entities;
+  Iterable<T> parse() sync* {
+    entities = LineSplitter
+        .split(new File(fileName).readAsStringSync())
+        .map((line) => lineParser.parse(line))
+        .toList(growable: false);
+    yield* entities;
   }
 }
