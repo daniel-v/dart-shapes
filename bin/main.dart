@@ -11,13 +11,8 @@ main(List<String> arguments) async {
 
   Logger log = initLogger();
 
-  var inputParser = new FileParser<Shape>()
-    ..fileName = params['input']
-    ..lineParser = new ShapeParser();
-
-  var predicateParser = new FileParser<Predicate>()
-    ..fileName = params['predicates']
-    ..lineParser = new PredicateParser();
+  var inputParser = new FileParser<Shape>(params['input'], new ShapeParser());
+  var predicateParser = new FileParser<Predicate>(params['predicates'], new PredicateParser());
 
   try {
     shapes = await inputParser.parse();
