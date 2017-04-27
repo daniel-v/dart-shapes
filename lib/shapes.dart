@@ -10,4 +10,3 @@ part 'src/shapes/circle.dart';
 part 'src/shapes/square.dart';
 part 'src/shapes/rectangle.dart';
 part 'src/shapes/shape-parser.dart';
-part 'src/shapes/shapes-mirror.dart';
