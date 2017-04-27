@@ -1,6 +1,6 @@
 part of shapes;
 
-class ShapeParser implements LineParser {
+class ShapeParser implements LineParser<Shape> {
   ShapesMirror mirror;
 
   ShapeParser() {
@@ -8,7 +8,7 @@ class ShapeParser implements LineParser {
     mirror.buildMirrors();
   }
 
-  parse(String line) {
+  Shape parse(String line) {
     return mirror.reflect(line);
   }
 }
