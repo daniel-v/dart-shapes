@@ -2,7 +2,8 @@ library predicates;
 
 import 'dart:mirrors';
 import 'package:logging/logging.dart';
-import 'package:dart_shapes/line-parser.dart';
+
+import 'line-parser.dart';
 import 'shapes.dart';
 
 part 'src/predicates/predicate.dart';
